@@ -50,13 +50,7 @@ public class Quiz
     }
 
 
-    public int count()
-    {
-
-        return 0;
-    }
-
-
+   
     public void EditQuestion(int indexToEdit, Question EditQ)
     {
 
@@ -77,6 +71,47 @@ public class Quiz
         }
         return _questions;
 
+    }
+
+    public Question GetRandomQuestion()
+    {
+        int Index = 0;
+        if (File.Exists(folderPath + jsonFilePath))
+        {
+
+            _questions = JsonSerializer.Deserialize<List<Question>>(File.ReadAllText(folderPath + jsonFilePath));
+
+            Random RandIndex = new Random();
+            Index = RandIndex.Next(0, _questions.Count());
+
+            while (true)
+            {
+
+                if (indexOfaskedQ.Count == _questions.Count())
+                {
+                    MessageBox.Show("Game Ends");
+                    break;
+                }
+                if (indexOfaskedQ.Contains(Index))
+                {
+
+                    Index = RandIndex.Next(0, _questions.Count());
+                }
+                if (!indexOfaskedQ.Contains(Index))
+                {
+                    break;
+                }
+            }
+            indexOfaskedQ.Add(Index);
+        }
+
+        return Questions.ElementAt(Index);
+
+    }
+    public int count()
+    {
+
+        return _questions.Count();
     }
 
 
