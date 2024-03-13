@@ -82,7 +82,27 @@ public class Quiz
 
     public void AddQuestion(string statement, int correctAnswer, params string[] answers)
     {
+        List<Question> questionList;
+        if (File.Exists(folderPath + jsonFilePath))
 
+        {
+            string jsonS = File.ReadAllText(folderPath + jsonFilePath);
+            questionList = JsonSerializer.Deserialize<List<Question>>(jsonS) ?? new List<Question>();
+            foreach (var qou in questionList)
+            {
+
+                _questions = Questions.Concat(new List<Question> { qou });
+            }
+        }
+                Question q = new Question(statement, correctAnswer, answers);
+                _questions = Questions.Concat(new List<Question> { q });
+                questionList = _questions.ToList();
+
+                // Serialize the list of questions to JSON
+                string jsonString = JsonSerializer.Serialize(questionList);
+
+                // Write the JSON data to a file
+                File.WriteAllText(folderPath + jsonFilePath, jsonString);
     }
 
 
